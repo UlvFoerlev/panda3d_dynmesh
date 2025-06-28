@@ -11,3 +11,4 @@ dependencies = [
     "panda3d>=1.10.0"
 ]
 license = 'MIT'
+license_file = "LICENSE"
