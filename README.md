@@ -1,2 +1,4 @@
-# panda3d_dynmesh
-Helper object for generating dynamic meshes in panda3d.
+# Panda3D Dynmesh
+
+A simplified interface for generating Panda3D procedural geometry using pydantic. 
+This is still an early version.
