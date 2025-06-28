@@ -1,0 +1,13 @@
+[project]
+name = "panda3d_dynmesh"
+description = 'Panda3D DynMesh'
+requires-python = ">=3.10"
+keywords = []
+authors = [{ name = "Ulv Foerlev", email = "ulvfoerlev@gmail.com" }]
+dynamic = ["version"]
+dependencies = [
+    "pydantic>=2.1.1",
+    "pydantic-extra-types>=2.0.0",
+    "panda3d>=1.10.0"
+]
+license = 'MIT'
