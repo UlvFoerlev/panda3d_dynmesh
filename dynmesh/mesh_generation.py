@@ -22,7 +22,7 @@ def generate_mesh(
     uvs: list[Point2],
     colors: list[Color],
     name: str,
-    vertex_format: GeomVertexFormat,
+    vertex_format: GeomVertexFormat | None,
 ) -> tuple[GeomNode, NodePath]:
     """
     Generates Panda3D Mesh from Data
@@ -58,7 +58,7 @@ def generate_mesh(
 
         color: Color = colors[vertex_index].as_rgb_tuple()
         if len(color) == 3:
-            color = (*color, 1)
+            color = (*color, 1.0)
 
         color_writer.add_data4(tuple(float(x / 255) for x in color))  # type: ignore
 

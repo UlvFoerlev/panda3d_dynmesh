@@ -1,15 +1,13 @@
 from typing import Self
 
-from panda3d.core import (
-    GeomNode,
-    GeomVertexFormat,
-    NodePath,
-    Vec3,
-)
+from panda3d.core import GeomNode, GeomVertexFormat, NodePath, Vec3, Point3, Vec2D, Vec2
 from pydantic.color import Color
+from pydantic import conint
+from scipy.spatial.transform import Rotation
 
 from .base import DynMeshBase
 from .mesh_generation import generate_mesh
+from .math import rotate_point, rotation_matrix
 
 
 class DynMesh(DynMeshBase):
@@ -75,11 +73,21 @@ class DynMesh(DynMeshBase):
             and self.normals == other.normals
         )
 
-    def move_vectors(self, vec: Vec3):
+    def move(self, vec: Vec3):
         self.vertices = [x + vec for x in self.vertices]
 
+    def rotate(
+        self, radians: float, axis: Vec3 | None = None, pivot: Point3 | None = None
+    ):
+        axis = axis or Vec3(0, 0, 0)
+        pivot = pivot or Point3(0, 0, 0)
+
+        m = rotation_matrix(axis=axis, theta=radians)
+
+        self.vertices = [rotate_point(x, m, pivot) for x in self.vertices]
+
     def generate_panda_3d_mesh(
-        name: str = "surface", vertex_format: GeomVertexFormat | None = None
+        self, name: str = "surface", vertex_format: GeomVertexFormat | None = None
     ) -> tuple[GeomNode, NodePath]:
         """
         Generate Panda3D Mesh based on DynMesh data.
@@ -94,3 +102,16 @@ class DynMesh(DynMeshBase):
             uvs=self.uvs,
             colors=self.colors,
         )
+
+    def add_plane(
+        self,
+        position: Point3 | None = None,
+        rotation: Vec3 | None = None,
+        x_vertices: conint(ge=2) = 2,  # type: ignore
+        y_vertices: conint(ge=2) = 2,  # type: ignore
+        size: Vec2 | None = None,
+        two_sided: bool = False,
+    ) -> None:
+        size = size or Vec2(1.0, 1.0)
+        position = position or Point3(0, 0, 0)
+        rotation = rotation or Vec3(0, 0, 0)

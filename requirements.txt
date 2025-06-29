@@ -1,3 +1,5 @@
 panda3d
 pydantic
 pydantic-extra-types
+scipy
+numpy
