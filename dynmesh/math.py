@@ -40,4 +40,4 @@ def rotate_point(
 
     pivot = pivot or Point3(0, 0, 0)
 
-    return dot(rotation_matrix, point - pivot) + pivot  # type: ignore
+    return Point3(*dot(rotation_matrix, point - pivot) + pivot)  # type: ignore

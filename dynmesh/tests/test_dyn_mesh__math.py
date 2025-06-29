@@ -1,7 +1,5 @@
-import pytest
-
-# from numpy import array_equal, identity, ndarray, zeros, array
 import numpy as np
+import pytest
 from panda3d.core import Point3, Vec3
 
 from dynmesh.math import rotate_point, rotation_matrix
@@ -42,3 +40,37 @@ def test_rotate_matrix(axis: Vec3, theta: float, result_matrix: np.ndarray):
     m = rotation_matrix(axis=axis, theta=theta)
 
     assert np.all(np.isclose(m, result_matrix))
+
+
+@pytest.mark.parametrize(
+    argnames=["point", "rotation_matrix", "pivot", "expected_result"],
+    argvalues=[
+        (
+            Point3(1, 0, 0),
+            [
+                [-1.0000000, 0.0000000, 0.0000000],
+                [0.0000000, -1.0000000, 0.0000000],
+                [0.0000000, 0.0000000, 1.0000000],
+            ],
+            Point3(0, 0, 0),
+            Point3(-1, 0, 0),
+        ),
+        (
+            Point3(1, 0, 0),
+            [
+                [-1.0000000, 0.0000000, 0.0000000],
+                [0.0000000, -1.0000000, 0.0000000],
+                [0.0000000, 0.0000000, 1.0000000],
+            ],
+            Point3(0.5, 0, 0),
+            Point3(0, 0, 0),
+        ),
+    ],
+)
+def test_rotate_point(
+    point: Point3, rotation_matrix: np.ndarray, pivot: Point3, expected_result: Point3
+):
+    new_point = rotate_point(point=point, rotation_matrix=rotation_matrix, pivot=pivot)
+
+    print(new_point, expected_result)
+    assert new_point == expected_result
