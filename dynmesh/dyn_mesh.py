@@ -8,7 +8,7 @@ from scipy.spatial.transform import Rotation
 from .base import DynMeshBase
 from .mesh_generation import generate_mesh
 from .math import rotate_point, rotation_matrix
-
+import numpy as np
 
 class DynMesh(DynMeshBase):
     def merge(self, other: Self) -> None:
@@ -27,10 +27,12 @@ class DynMesh(DynMeshBase):
         self.triangles += new_triangles
 
     def _round(self, number: float):
-        if self.settings.floating_point_precision is None:
-            return number
+        return round(number, 4)
+        
+        # if self.settings.floating_point_precision is None:
+        #     return number
 
-        return round(number, self.settings.floating_point_precision)
+        # return round(number, self.settings.floating_point_precision)
 
     def __eq__(self, other):
         """
@@ -40,7 +42,7 @@ class DynMesh(DynMeshBase):
         if len(self.vertices) != len(other.vertices):
             return False
 
-        for i, (x, y, z) in enumerate(self.vertices):
+        for i, p in enumerate(self.vertices):
             ox, oy, oz = other.vertices[i]
 
             if self._round(x) != self._round(ox):
