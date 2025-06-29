@@ -74,11 +74,7 @@ class DynMeshBase(BaseModel):
         cls, colors: Iterable[Collection[float | int] | Color | str]
     ):
         def _decode_color(
-            color: Color
-            | tuple[int, int, int]
-            | tuple[float, float, float]
-            | list[int]
-            | list[float],
+            color: Collection[float | int] | Color | str
         ):
             if isinstance(color, Color):
                 return color
@@ -92,7 +88,7 @@ class DynMeshBase(BaseModel):
                         "Color must have either 3 or 4 elements. (R, G, B) or (R, G, B, A)."
                     )
                 if isinstance(color[0], int):
-                    return Color(color)
+                    return Color(color) # type: ignore
 
                 if isinstance(color[0], float):
                     r, g, b = [int(x) * 255 for x in color[0:3]]
