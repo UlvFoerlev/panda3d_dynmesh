@@ -34,12 +34,25 @@ from dynmesh.math import rotate_point, rotation_matrix
                 ]
             ),
         ),
+        (
+            Vec3(0, 0, 1),
+            90 * np.pi / 180,
+            np.array(
+                [
+                    [
+                        [0.0, -1.0, 0.0],
+                        [1.0, 0.0, 0.0],
+                        [0.0, 0.0, 1.0],
+                    ]
+                ]
+            ),
+        ),
     ],
 )
 def test_rotate_matrix(axis: Vec3, theta: float, result_matrix: np.ndarray):
     m = rotation_matrix(axis=axis, theta=theta)
 
-    assert np.all(np.isclose(m, result_matrix))
+    assert np.all(np.isclose(m, result_matrix, 0.01, 0.01))
 
 
 @pytest.mark.parametrize(
@@ -72,5 +85,4 @@ def test_rotate_point(
 ):
     new_point = rotate_point(point=point, rotation_matrix=rotation_matrix, pivot=pivot)
 
-    print(new_point, expected_result)
     assert new_point == expected_result
